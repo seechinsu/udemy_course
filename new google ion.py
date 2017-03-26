@@ -1,6 +1,8 @@
 import math
 
 def answer(h,q):
+    count = 0
+    q = q
     solution = []
 
     #print bin(q)
@@ -9,24 +11,27 @@ def answer(h,q):
     #print bin(mask)
     #print bin((q & mask)+1)
 
-    def clearbit(child):
+    def clearbit(child, sumofdiff):
         mask = (child << 1) - 1
         newchild = (child & mask) + 1
-        print newchild
-        sumofdiff += child-newchild
-        return newchild, sumofdiff
-
-
+        #print newchild
+        return newchild, (sumofdiff + (child-newchild))
 
     while ((q+1)& q) !=0 and ((q+2) & (q+1)) !=0:
-        q = clearbit(q)
+        q,count = clearbit(q,count)
 
-        print sum
-        #if ((newq+1) & newq) == 0:
-        #    solution.append[(2 * newq) + 1 + sumofdiff]
-        #elif ((newq+2)&(newq+1))==0:
-        #    solution.append[newq+1+sumofdiff]
+        print q
+        print count
 
+    if ((q+1) & q) == 0:
+        solution.append((2 * q) + 1 + count)
+    elif ((q+2)&(q+1))==0:
+        solution.append(q+1+count)
+
+    #print ((q+1) & q)
+    #print (q+2)&(q+1)
+
+    print solution
     return None
 
 answer(15,12)
