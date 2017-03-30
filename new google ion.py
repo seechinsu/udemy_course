@@ -10,6 +10,7 @@ def answer(h,q):
         i = i
         def clearbit(child, sumofdiff):
             mask = max([x for x in masks if x < child])
+
             newchild = (child & mask) + 1
             #print bin(mask)
             #print bin(child)
