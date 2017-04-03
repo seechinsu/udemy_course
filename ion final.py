@@ -1,3 +1,5 @@
+import cProfile
+
 def answer(h,q):
     masks = [(2**i)-1 for i in range(1,h+1)]
     topconverter = max(masks)
@@ -23,3 +25,5 @@ def answer(h,q):
             solution.append(i+1+count)
 
     return solution
+
+print cProfile.run('answer(3,[7, 3, 5, 1])')

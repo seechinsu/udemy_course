@@ -1,4 +1,6 @@
 import operator
+import cProfile
+
 def answer(xs):
 
     newxs = [x for x in xs if x!=1 and x!=0]
@@ -17,12 +19,12 @@ def answer(xs):
 
     return product
 
-print answer([2, 0, 2, 2, 0])
-print answer([-2, -3, 4, -5])
-print answer([-2, -3, -5, -5])
-print answer([-2])
-print answer([0,0,1,0,0])
-print answer([0,0,0,0])
-print answer([0,0,-2,0])
-print answer([0,0,-2,0,-2])
-print answer([0,0,-2,0,-2,-2,-2])
+# print answer([2, 0, 2, 2, 0])
+# print answer([-2, -3, 4, -5])
+# print answer([-2, -3, -5, -5])
+# print answer([-2])
+# print answer([0,0,1,0,0])
+# print answer([0,0,0,0])
+# print answer([0,0,-2,0])
+# print answer([0,0,-2,0,-2])
+print cProfile.run('answer([0,0,-2,0,-2,-2,-2])')

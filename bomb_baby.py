@@ -25,8 +25,8 @@ def answer(M,F):
     else:
         return str(cyclecount)
 
-print answer("2","1")
-print answer("4","7")
-print answer("2","4")
-print answer("41","2")
-print answer("4", "31")
+#print answer("2","1")
+#print answer("4","7")
+#print answer("2","4")
+#print answer("50000001","2")
+#print answer("4", "31")
