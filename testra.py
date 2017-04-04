@@ -110,7 +110,6 @@ class Graph:
 def shortest(v, path):
     ''' make shortest path from v.previous'''
     if v.previous:
-        print v.previous
         path.append(v.previous.get_id())
         shortest(v.previous, path)
     return
@@ -144,10 +143,10 @@ def dijkstra(aGraph, start, target):
             if new_dist < next.get_distance():
                 next.set_distance(new_dist)
                 next.set_previous(current)
-                'updated : current = %s next = %s new_dist = %s' \
+                print 'updated : current = %s next = %s new_dist = %s' \
                       % (current.get_id(), next.get_id(), next.get_distance())
             else:
-                'not updated : current = %s next = %s new_dist = %s' \
+                print 'not updated : current = %s next = %s new_dist = %s' \
                       % (current.get_id(), next.get_id(), next.get_distance())
 
         # Rebuild heap
@@ -164,37 +163,11 @@ def legalCoord(i,j):
     else:
         return False
 
-
-def adjacent_to((maze_dim, point)):
-    neighbors = (
-        (point[0] - 1, point[1]),
-        (point[0], point[1] - 1),
-        (point[0], point[1] + 1),
-        (point[0] + 1, point[1]))
-
-    return [p for p in neighbors if 0 <= p[0] < maze_dim[0] and 0 <= p[1] < maze_dim[1]]
-
-
-def removable(maz, ii, jj):
-    counter = 0
-    for p in adjacent_to(((len(maz), len(maz[0])), (ii, jj))):
-        if not maz[p[0]][p[1]]:
-            if counter:
-                return True
-            counter += 1
-    return False
-
 def answer(map):
     g = Graph()
     counter = 0
     mazematrix = {}
     edges = []
-    passable_walls = []
-
-    for i in range(len(maze)):
-        for j in range(len(maze)):
-            if maze[i][j] == 1 and removable(maze, i, j):
-                passable_walls.append((i, j))
 
     for i in range(len(maze) ** 2):
         g.add_vertex(i)
@@ -211,117 +184,70 @@ def answer(map):
             if legalCoord(i, j) == True:
 
                 # center grid
-                if 0 < i < (len(mazematrix) - 1) and 0 < j < (len(mazematrix) - 1):
-                    # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i][j + 1], maze[i][j + 1]),
-                                  (mazematrix[i][j], mazematrix[i + 1][j], maze[i + 1][j]),
-                                  (mazematrix[i][j], mazematrix[i][j - 1], maze[i][j - 1]),
-                                  (mazematrix[i][j], mazematrix[i - 1][j], maze[i - 1][j])])
-
-                # top mid edge
                 if i == 0 and j != 0 and j != (len(mazematrix) - 1):
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i + 1][j], maze[i + 1][j]),
-                                  (mazematrix[i][j], mazematrix[i][j + 1], maze[i][j + 1]),
-                                  (mazematrix[i][j], mazematrix[i][j - 1], maze[i][j - 1])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i + 1][j]),
+                                  (mazematrix[i][j], mazematrix[i][j + 1]),
+                                  (mazematrix[i][j], mazematrix[i][j - 1])])
 
-                # bottom mid range
+                    # bottom mid range
                 if i == (len(mazematrix) - 1) and j != 0 and j != (len(mazematrix) - 1):
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i][j + 1], maze[i][j + 1]),
-                                  (mazematrix[i][j], mazematrix[i][j - 1], maze[i][j - 1]),
-                                  (mazematrix[i][j], mazematrix[i - 1][j], maze[i - 1][j])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i][j + 1]),
+                                  (mazematrix[i][j], mazematrix[i][j - 1]),
+                                  (mazematrix[i][j], mazematrix[i - 1][j])])
 
-                # left mid range
+                    # left mid range
                 if j == 0 and i != 0 and i != (len(mazematrix) - 1):
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i - 1][j], maze[i - 1][j]),
-                                  (mazematrix[i][j], mazematrix[i + 1][j], maze[i + 1][j]),
-                                  (mazematrix[i][j], mazematrix[i][j + 1], maze[i][j + 1])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i - 1][j]),
+                                  (mazematrix[i][j], mazematrix[i + 1][j]),
+                                  (mazematrix[i][j], mazematrix[i][j + 1])])
 
-                # Right mid range
+                    # Right mid range
                 if j == (len(mazematrix) - 1) and i != 0 and i != (len(mazematrix) - 1):
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i - 1][j], maze[i - 1][j]),
-                                  (mazematrix[i][j], mazematrix[i + 1][j], maze[i + 1][j]),
-                                  (mazematrix[i][j], mazematrix[i][j - 1], maze[i][j - 1])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i - 1][j]),
+                                  (mazematrix[i][j], mazematrix[i + 1][j]),
+                                  (mazematrix[i][j], mazematrix[i][j - 1])])
 
-                # left top corner
+                    # left top corner
                 if i == 0 and j == 0:
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i][j + 1], maze[i][j + 1]),
-                                  (mazematrix[i][j], mazematrix[i + 1][j], maze[i + 1][j])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i][j + 1]),
+                                  (mazematrix[i][j], mazematrix[i + 1][j])])
 
-                # right bottom corner
+                    # right bottom corner
                 if i == (len(mazematrix) - 1) and j == (len(mazematrix) - 1):
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i][j - 1], maze[i][j - 1]),
-                                  (mazematrix[i][j], mazematrix[i - 1][j], maze[i - 1][j])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i][j - 1]),
+                                  (mazematrix[i][j], mazematrix[i - 1][j])])
 
-                # right top corner
+                    # right top corner
                 if i == 0 and j == (len(mazematrix) - 1):
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i][j - 1], maze[i][j - 1]),
-                                  (mazematrix[i][j], mazematrix[i + 1][j], maze[i + 1][j])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i][j - 1]),
+                                  (mazematrix[i][j], mazematrix[i + 1][j])])
 
-                # left bottom corner
+                    # left bottom corner
                 if i == (len(mazematrix) - 1) and j == 0:
                     # print i, j, "start"
-                    edges.extend([(mazematrix[i][j], mazematrix[i][j + 1], maze[i][j + 1]),
-                                  (mazematrix[i][j], mazematrix[i - 1][j], maze[i - 1][j])])
+                    edges.extend([(mazematrix[i][j], mazematrix[i][j + 1]),
+                                  (mazematrix[i][j], mazematrix[i - 1][j])])
             else:
                 print "not in bound"
 
     for i in edges:
-        g.add_edge(i[0], i[1], i[2])
-
-    entrancetowall = []
-    walltoexit = []
-    passable_walls_node = []
+        g.add_edge(i[0], i[1])
 
     #dijkstra(g, g.get_vertex(0), g.get_vertex(len(maze)**2-1))
-
-    for i in passable_walls:
-        passable_walls_node.append(mazematrix[i[0]][i[1]])
-
-    # for i in passable_walls_node:
-    #     dijkstra(g, g.get_vertex(0), g.get_vertex(i))
-    #
-    #     target = g.get_vertex(i)
-    #     path = [target.get_id()]
-    #     shortest(target, path)
-    #     entrancetowall.append(path)
-
-    # for i in passable_walls_node:
-    #     dijkstra(g, g.get_vertex(i), g.get_vertex(len(maze)**2-1))
-    #
-    #     target = g.get_vertex(len(maze)**2-1)
-    #     path = [target.get_id()]
-    #     shortest(target, path)
-    #     walltoexit.append(path[::-1])
-
-    dijkstra(g, g.get_vertex(6), g.get_vertex(35))
+    dijkstra(g, g.get_vertex(0), g.get_vertex(35))
 
     target = g.get_vertex(35)
     path = [target.get_id()]
     shortest(target, path)
-    walltoexit.append(path[::-1])
+    return (path[::-1])
 
-    #print entrancetowall
-    #print walltoexit
+#print cProfile.run('answer(maze)')
 
-    # print mazematrix
-    # print edges
-
-    return None
-
-answer(maze)
-
-# maze = [[0, 0, 0, 0, 0, 0],
-#         [1, 1, 1, 1, 1, 0],
-#         [0, 0, 0, 0, 0, 0],
-#         [0, 1, 1, 1, 1, 1],
-#         [0, 1, 1, 1, 1, 1],
-#         [0, 0, 0, 0, 0, 0]]
-
-
+print answer(maze)
